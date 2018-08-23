@@ -601,7 +601,7 @@ function DAO:page(size, offset, options)
     end
   end
 
-  local rows, err_t, offset = self.strategy:page(size, offset, options)
+  local rows, err_t, offset = self.strategy:page(size, offset, nil, options)
   if err_t then
     return nil, tostring(err_t), err_t
   end
