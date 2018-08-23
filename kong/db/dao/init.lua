@@ -149,6 +149,18 @@ local function validate_options_value(options, schema, context)
 end
 
 
+local function iteration_failed(err, err_t)
+  local failed = false
+  return function()
+    if failed then
+      return nil
+    end
+    failed = true
+    return false, err, err_t
+  end
+end
+
+
 local function page_iterator(pager, size, options)
   local page = 1
   local i, rows, err, offset = 0, pager(size, nil, options)
@@ -282,7 +294,7 @@ local function generate_foreign_key_methods(schema)
           local ok, err = validate_size_value(size)
           if not ok then
             local err_t = self.errors:invalid_size(err)
-            return nil, tostring(err_t), err_t
+            return iteration_failed(tostring(err_t), err_t)
           end
 
         else
@@ -292,7 +304,7 @@ local function generate_foreign_key_methods(schema)
         local ok, errors = self.schema:validate_primary_key(foreign_key)
         if not ok then
           local err_t = self.errors:invalid_primary_key(errors)
-          return nil, tostring(err_t), err_t
+          return iteration_failed(tostring(err_t), err_t)
         end
 
         local strategy = self.strategy
