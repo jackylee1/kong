@@ -261,7 +261,7 @@ for _, strategy in helpers.each_strategy() do
               message = "'x' is not a valid offset: bad base64 encoding"
             }, cjson.decode(body))
 
-            res  = client:get("/routes", { query = { offset = "potato" } })
+            res  = client:get("/routes", { query = { offset = "|potato|" } })
             body = assert.res_status(400, res)
 
             local json = cjson.decode(body)
