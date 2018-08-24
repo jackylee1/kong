@@ -94,6 +94,7 @@ end
 ---------------
 local conf = assert(conf_loader(TEST_CONF_PATH))
 local db = assert(DB.new(conf))
+assert(db:init_connector())
 local dao = assert(DAOFactory.new(conf, db))
 db.old_dao = dao
 local blueprints = assert(Blueprints.new(dao, db))
